@@ -1,0 +1,10 @@
+{
+  "watch": [
+    "src",
+    ".env"
+  ],
+  "ext": "ts",
+  "execMap": {
+    "ts": "ts-node-dev --transpile-only ./src/app.ts"
+  }
+}
