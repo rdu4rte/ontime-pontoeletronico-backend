@@ -9,8 +9,8 @@ export const config: ConnectionOptions = <ConnectionOptions>{
   database: tpDb,
   synchronize: false,
   migrationsRun: false,
-  entities: ["{src, dist}/modules/**/entity/*.entity.{ts, js}"],
-  migrations: ["{src, dist}/migration/*.{ts, js}"],
+  entities: ["dist/src/modules/**/entity/*.entity.js"],
+  migrations: ["dist/src/migration/*.js"],
   cli: {
     migrationsDir: "src/migration",
   },

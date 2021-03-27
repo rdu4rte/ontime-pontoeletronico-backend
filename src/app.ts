@@ -5,8 +5,6 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import compression from "compression";
-import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "./swagger.json";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { ContainerConfigLoader } from "./ioc/container";
 import Logger from "./services/winston.logger";
@@ -18,9 +16,11 @@ const serverStart = async () => {
 
   try {
     const container = ContainerConfigLoader.Load();
-    const server = new InversifyExpressServer(container, null, { rootPath: "/api/v1" });
+    const server = new InversifyExpressServer(container);
 
     server.setConfig((app) => {
+      app.use(express.static("public"));
+
       app.use(cors());
 
       app.use(express.json());
@@ -38,7 +38,7 @@ const serverStart = async () => {
       );
 
       if (nodeEnv === "development") {
-        app.use("/api/v1", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        // swagger
       }
 
       createConnection(config)

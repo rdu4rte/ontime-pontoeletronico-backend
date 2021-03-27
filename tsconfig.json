@@ -13,9 +13,9 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./"
   },
   "lib": ["ES6"],
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "ormconfig.ts"],
   "exclude": ["node_modules"]
 }
