@@ -1,5 +1,6 @@
 import * as express from "express";
 import "reflect-metadata";
+import { port, nodeEnv } from "./config/env.config";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -8,15 +9,16 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger.json";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { ContainerConfigLoader } from "./ioc/container";
-import { port, nodeEnv } from "./config/env.config";
 import Logger from "./services/winston.logger";
+import { createConnection } from "typeorm";
+import { config } from "./config/typeorm.config";
 
 const serverStart = async () => {
   const logger = Logger;
 
   try {
     const container = ContainerConfigLoader.Load();
-    const server = new InversifyExpressServer(container);
+    const server = new InversifyExpressServer(container, null, { rootPath: "/api/v1" });
 
     server.setConfig((app) => {
       app.use(cors());
@@ -35,9 +37,17 @@ const serverStart = async () => {
         }),
       );
 
-      if (nodeEnv === "develop") {
+      if (nodeEnv === "development") {
         app.use("/api/v1", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
       }
+
+      createConnection(config)
+        .then(() => {
+          logger.info("[TypeORM] Database connected");
+        })
+        .catch((err) => {
+          logger.error(`Failed to connect database, ${err}`);
+        });
     });
 
     const serverInstance = server.build();
@@ -45,7 +55,7 @@ const serverStart = async () => {
       logger.info(`[Bootstrap] Server running on: http://127.0.0.1:${port}/api/v1/`);
     });
   } catch (err) {
-    logger.error(`[Bootstrap] Error starting server - ${err.message}`);
+    logger.error(`Error starting server: ${err.message}`);
     process.exit(1);
   }
 };

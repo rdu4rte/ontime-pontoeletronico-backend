@@ -1,15 +1,18 @@
 import * as dotenv from "dotenv";
 
 export const nodeEnv: string = process.env.NODE_ENV;
+
+dotenv.config();
+// if (nodeEnv === "development") {
+//   dotenv.config({ path: ".env-dev" });
+// } else if (nodeEnv === "production") {
+//   dotenv.config({ path: ".env-prod" });
+// }
+
 export const port: number = +process.env.PORT || +process.env.CUSTOM_PORT;
 
-if (nodeEnv === "develop") {
-  dotenv.config({ path: ".env-develop" });
-} else if (nodeEnv === "prod") {
-  dotenv.config({ path: ".env" });
-}
-
 // db
+export const tpType: string = process.env.DB_TYPE;
 export const tpHost: string = process.env.DB_HOST;
 export const tpPort: number = +process.env.DB_PORT;
 export const tpUser: string = process.env.DB_USERNAME;

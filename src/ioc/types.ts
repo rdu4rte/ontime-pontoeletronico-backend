@@ -1,7 +1,10 @@
 export const TYPES = {
-  // db
-  // server services
   // repositories
+  UserRepository: Symbol.for("UserRepository"),
+
   // services
+  UserService: Symbol.for("UserService"),
+
   // controllers
+  UserController: Symbol.for("UserController"),
 };
