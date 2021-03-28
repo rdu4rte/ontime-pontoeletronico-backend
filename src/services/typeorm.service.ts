@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import Logger from "./winston.logger";
+import Logger from "../config/winston.logger";
 import { ConnectionOptions, createConnection, DatabaseType } from "typeorm";
 import { tpHost, tpUser, tpPass, tpDb, tpType, nodeEnv } from "../config/env.config";
 

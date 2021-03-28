@@ -7,7 +7,7 @@ import rateLimit from "express-rate-limit";
 import compression from "compression";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { ContainerConfigLoader } from "./ioc/container";
-import Logger from "./services/winston.logger";
+import Logger from "./config/winston.logger";
 import * as swagger from "swagger-express-ts";
 import { TypeOrmService } from "./services/typeorm.service";
 import { TYPES } from "./ioc/types";

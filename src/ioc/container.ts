@@ -1,9 +1,10 @@
 import { Container } from "inversify";
 import { TYPES } from "./types";
+import { TypeOrmService } from "../services/typeorm.service";
 import { UserRepository } from "../modules/user/user.repository";
 import { UserService } from "../modules/user/user.service";
-import { UserController } from "../modules/user/user.controller";
-import { TypeOrmService } from "../services/typeorm.service";
+import { UsersController } from "../modules/user/controllers/users.controller";
+import { UserController } from "../modules/user/controllers/user.controller";
 
 export class ContainerConfigLoader {
   public static Load(): Container {
@@ -19,6 +20,7 @@ export class ContainerConfigLoader {
     container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
 
     // controllers
+    container.bind<UsersController>(TYPES.UsersController).to(UsersController).inSingletonScope();
     container.bind<UserController>(TYPES.UserController).to(UserController).inSingletonScope();
 
     return container;

@@ -1,5 +1,5 @@
 import winston from "winston";
-import { nodeEnv } from "../config/env.config";
+import { nodeEnv } from "./env.config";
 
 const transports = [];
 if (nodeEnv !== "development") {

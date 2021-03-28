@@ -24,7 +24,7 @@ export class User {
   @Column({ default: true })
   active: boolean;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column("enum", {
