@@ -5,7 +5,7 @@ import { User } from "./entity/user.entity";
 import { MessageDTO } from "../../shared/dto/response.dto";
 import { UserDTO } from "./dto/user.dto";
 import Logger from "../../config/winston.logger";
-import { validate } from "class-validator";
+import { validate, validateOrReject } from "class-validator";
 
 @injectable()
 export class UserService {
@@ -43,7 +43,13 @@ export class UserService {
   public async insertOne(userDTO: UserDTO): Promise<MessageDTO> {
     const { password } = userDTO;
 
-    validate(userDTO).then((err) => {
+    if (password.p1 !== password.p2) {
+      return {
+        message: "Passwords dont match",
+      };
+    }
+
+    validate(userDTO, { forbidUnknownValues: true }).then((err) => {
       if (err.length > 0) {
         this.logger.error(err);
         return {
@@ -51,12 +57,6 @@ export class UserService {
         };
       }
     });
-
-    if (password.p1 !== password.p2) {
-      return {
-        message: "Passwords dont match",
-      };
-    }
 
     await this.userRepository.insertOne(userDTO);
     return {

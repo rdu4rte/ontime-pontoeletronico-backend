@@ -47,6 +47,7 @@ export class UsersController extends BaseHttpController {
     },
     responses: {
       202: { description: "User registered" },
+      409: { description: "User already registered" },
       500: { description: "Failed to register user" },
     },
   })
@@ -59,7 +60,7 @@ export class UsersController extends BaseHttpController {
       if (err.code == "23505") {
         return this.json({
           statusCode: 409,
-          message: "User invalid or user already registered",
+          message: "User already registered",
           detail: err.detail,
         });
       }

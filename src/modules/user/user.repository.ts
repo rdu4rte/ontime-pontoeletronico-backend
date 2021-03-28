@@ -33,7 +33,6 @@ export class UserRepository extends Repository<User> {
       ])
       .execute()
       .then((value: InsertResult) => {
-        console.log(value);
         return value;
       });
   }

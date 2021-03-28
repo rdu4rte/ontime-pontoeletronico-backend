@@ -1,4 +1,4 @@
-import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsNotEmpty } from "class-validator";
 import { ApiModel, ApiModelProperty } from "swagger-express-ts";
 
 export enum Role {
