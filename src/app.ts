@@ -8,8 +8,9 @@ import compression from "compression";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { ContainerConfigLoader } from "./ioc/container";
 import Logger from "./services/winston.logger";
-import { createConnection } from "typeorm";
-import { config } from "./config/typeorm.config";
+import * as swagger from "swagger-express-ts";
+import { TypeOrmService } from "./services/typeorm.service";
+import { TYPES } from "./ioc/types";
 
 const serverStart = async () => {
   const logger = Logger;
@@ -18,15 +19,20 @@ const serverStart = async () => {
     const container = ContainerConfigLoader.Load();
     const server = new InversifyExpressServer(container);
 
-    server.setConfig((app) => {
-      app.use(express.static("public"));
+    const typeorm = container.get<TypeOrmService>(TYPES.TypeOrmService);
+    await typeorm.connection();
 
+    server.setConfig((app) => {
       app.use(cors());
 
       app.use(express.json());
       app.use(express.urlencoded({ extended: true }));
 
-      app.use(helmet());
+      app.use(
+        helmet({
+          contentSecurityPolicy: false,
+        }),
+      );
       app.use(compression());
 
       app.use(
@@ -39,15 +45,22 @@ const serverStart = async () => {
 
       if (nodeEnv === "development") {
         // swagger
-      }
+        app.use("/api-docs/swagger", express.static("swagger"));
+        app.use("/api-docs/swagger/assets", express.static("node_modules/swagger-ui-dist"));
+        app.use(
+          swagger.express({
+            definition: {
+              info: {
+                title: "OnTime - Ponto Eletrônico",
+                version: "1.0",
+              },
+              basePath: "/api/v1",
+            },
+          }),
+        );
 
-      createConnection(config)
-        .then(() => {
-          logger.info("[TypeORM] Database connected");
-        })
-        .catch((err) => {
-          logger.error(`Failed to connect database, ${err}`);
-        });
+        logger.info(`[Swagger] Docs running on: http://127.0.0.1:${port}/api-docs/swagger`);
+      }
     });
 
     const serverInstance = server.build();

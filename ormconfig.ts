@@ -1,3 +1,3 @@
-import { config } from "./src/config/typeorm.config";
+import { config } from "./src/services/typeorm.service";
 
 module.exports = config;

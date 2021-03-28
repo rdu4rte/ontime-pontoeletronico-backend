@@ -1,10 +1,13 @@
 export const TYPES = {
+  // services
+  TypeOrmService: Symbol("TypeOrmService"),
+
   // repositories
-  UserRepository: Symbol.for("UserRepository"),
+  UserRepository: Symbol("UserRepository"),
 
   // services
-  UserService: Symbol.for("UserService"),
+  UserService: Symbol("UserService"),
 
   // controllers
-  UserController: Symbol.for("UserController"),
+  UserController: Symbol("UserController"),
 };

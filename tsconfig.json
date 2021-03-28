@@ -13,9 +13,10 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "outDir": "./dist",
-    "rootDir": "./"
+    "rootDir": "./",
+    "types": ["reflect-metadata", "swagger-express-ts"]
   },
   "lib": ["ES6"],
-  "include": ["./src/**/*", "ormconfig.ts"],
+  "include": ["./src/**/**/*", "ormconfig.ts"],
   "exclude": ["node_modules"]
 }

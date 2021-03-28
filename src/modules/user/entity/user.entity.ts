@@ -4,7 +4,7 @@ import * as argon2 from "argon2";
 import { argonSalt } from "../../../config/env.config";
 import { Role } from "../dto/user.dto";
 
-@Entity()
+@Entity({ name: "user" })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

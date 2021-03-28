@@ -5,7 +5,12 @@ import { JsonResult } from "inversify-express-utils/dts/results";
 import Logger from "../../services/winston.logger";
 import { TYPES } from "../../ioc/types";
 import { UserService } from "./user.service";
+import { ApiOperationGet, ApiPath } from "swagger-express-ts";
 
+@ApiPath({
+  path: "/user",
+  name: "User",
+})
 @controller("/api/v1/user")
 export class UserController extends BaseHttpController {
   private logger = Logger;
@@ -14,6 +19,13 @@ export class UserController extends BaseHttpController {
     super();
   }
 
+  @ApiOperationGet({
+    description: "Fetch Users",
+    responses: {
+      200: { description: "Success" },
+      500: { description: "Failed to fetch users" },
+    },
+  })
   @httpGet("/")
   public async fetchUsers(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
