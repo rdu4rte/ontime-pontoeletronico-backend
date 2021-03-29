@@ -1,4 +1,4 @@
-import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsNotEmpty } from "class-validator";
+import { IsAlphanumeric, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional } from "class-validator";
 import { ApiModel, ApiModelProperty } from "swagger-express-ts";
 
 export enum Role {
@@ -62,6 +62,7 @@ export class UserDTO {
   email: string;
 
   @IsBoolean()
+  @IsOptional()
   active: boolean;
 
   @ApiModelProperty({
@@ -72,5 +73,6 @@ export class UserDTO {
   password: PasswordDTO;
 
   @IsEnum(Role)
+  @IsOptional()
   role: Role;
 }

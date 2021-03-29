@@ -5,6 +5,7 @@ import { UserRepository } from "../modules/user/user.repository";
 import { UserService } from "../modules/user/user.service";
 import { UsersController } from "../modules/user/controllers/users.controller";
 import { UserController } from "../modules/user/controllers/user.controller";
+import { Utils } from "../shared/utils/validation";
 
 export class ContainerConfigLoader {
   public static Load(): Container {
@@ -12,6 +13,7 @@ export class ContainerConfigLoader {
 
     // services
     container.bind<TypeOrmService>(TYPES.TypeOrmService).to(TypeOrmService).inSingletonScope();
+    container.bind<Utils>(TYPES.Utils).to(Utils).inSingletonScope();
 
     // repositories
     container.bind<UserRepository>(TYPES.UserRepository).to(UserRepository).inSingletonScope();

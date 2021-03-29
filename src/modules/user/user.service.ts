@@ -5,13 +5,16 @@ import { User } from "./entity/user.entity";
 import { MessageDTO } from "../../shared/dto/response.dto";
 import { UserDTO } from "./dto/user.dto";
 import Logger from "../../config/winston.logger";
-import { validate, validateOrReject } from "class-validator";
+import { Utils } from "../../shared/utils/validation";
 
 @injectable()
 export class UserService {
   private logger = Logger;
 
-  constructor(@inject(TYPES.UserRepository) private userRepository: UserRepository) {}
+  constructor(
+    @inject(TYPES.UserRepository) private userRepository: UserRepository,
+    @inject(TYPES.Utils) private utils: Utils,
+  ) {}
 
   // fetch
   public async fetchUsers(): Promise<User[] | MessageDTO> {
@@ -40,7 +43,7 @@ export class UserService {
   }
 
   // insert
-  public async insertOne(userDTO: UserDTO): Promise<MessageDTO> {
+  public async insertOne(userDTO: UserDTO): Promise<MessageDTO | any> {
     const { password } = userDTO;
 
     if (password.p1 !== password.p2) {
@@ -49,19 +52,13 @@ export class UserService {
       };
     }
 
-    validate(userDTO, { forbidUnknownValues: true }).then((err) => {
-      if (err.length > 0) {
-        this.logger.error(err);
-        return {
-          message: "Invalid user. Please, try again",
-        };
+    const result = await this.utils.classValidation(UserDTO, userDTO).then((validatedUser: UserDTO) => {
+      if (validatedUser) {
+        return validatedUser;
       }
     });
 
-    await this.userRepository.insertOne(userDTO);
-    return {
-      message: `User "${userDTO.username}" registered`,
-    };
+    await this.userRepository.insertOne(result);
   }
 
   // update
