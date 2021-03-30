@@ -17,24 +17,27 @@ export class UserRepository extends Repository<User> {
 
   // insert
   public async insertOne(userDTO: UserDTO): Promise<InsertResult> {
-    const { username, email, firstName, lastName, password } = userDTO;
+    const entity = Object.assign(new User(), {
+      username: userDTO.username,
+      email: userDTO.email,
+      firstName: userDTO.firstName,
+      lastName: userDTO.lastName,
+      password: userDTO.password.p1,
+    });
 
     return await createQueryBuilder()
       .insert()
       .into(User)
-      .values([
-        {
-          username: username,
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          password: password.p1,
-        },
-      ])
+      .values(entity)
       .execute()
       .then((value: InsertResult) => {
         return value;
       });
+  }
+
+  // find by name
+  public async findByName(name: string): Promise<User> {
+    return await createQueryBuilder(User, "user").addSelect("user.password").where({ username: name }).getOne();
   }
 
   // update

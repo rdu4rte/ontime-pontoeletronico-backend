@@ -6,6 +6,8 @@ import { MessageDTO } from "../../shared/dto/response.dto";
 import { UserDTO } from "./dto/user.dto";
 import Logger from "../../config/winston.logger";
 import { Utils } from "../../shared/utils/validation";
+import { CredentialsDTO } from "./dto/credentials.dto";
+import { IToken } from "./interface/token.interface";
 
 @injectable()
 export class UserService {
@@ -59,6 +61,36 @@ export class UserService {
     });
 
     await this.userRepository.insertOne(result);
+  }
+
+  // login
+  public async loginUser(credentialsDTO: CredentialsDTO): Promise<IToken | MessageDTO> {
+    const result = await this.utils
+      .classValidation(CredentialsDTO, credentialsDTO)
+      .then((validatedUser: CredentialsDTO) => {
+        if (validatedUser) {
+          return validatedUser;
+        }
+      });
+
+    const user = await this.userRepository.findByName(result.username);
+
+    if (!user) {
+      this.logger.error("User not found");
+      return {
+        message: "User Invalid",
+      };
+    }
+
+    const isMatch = await this.utils.matchPasswords(user.password, credentialsDTO.password);
+
+    if (user && isMatch) {
+      return this.utils.createToken(user);
+    }
+
+    return {
+      message: "Invalid Credentials",
+    };
   }
 
   // update

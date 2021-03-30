@@ -1,6 +1,7 @@
 export const TYPES = {
   // services
   TypeOrmService: Symbol("TypeOrmService"),
+  JwtMiddleware: Symbol("JwtMiddleware"),
   Utils: Symbol("Utils"),
 
   // repositories
@@ -10,6 +11,5 @@ export const TYPES = {
   UserService: Symbol("UserService"),
 
   // controllers
-  UsersController: Symbol("UsersController"),
   UserController: Symbol("UserController"),
 };

@@ -17,6 +17,7 @@
     "types": ["reflect-metadata", "swagger-express-ts"]
   },
   "lib": ["ES6"],
-  "include": ["./src/**/**/*", "ormconfig.ts"],
-  "exclude": ["node_modules"]
+  "include": ["./src/**/*", "ormconfig.ts"],
+  "exclude": ["node_modules"],
+  "files": ["./src/types/index.d.ts"]
 }

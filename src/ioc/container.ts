@@ -1,11 +1,11 @@
 import { Container } from "inversify";
 import { TYPES } from "./types";
+import { Utils } from "../shared/utils/validation";
 import { TypeOrmService } from "../services/typeorm.service";
 import { UserRepository } from "../modules/user/user.repository";
 import { UserService } from "../modules/user/user.service";
-import { UsersController } from "../modules/user/controllers/users.controller";
-import { UserController } from "../modules/user/controllers/user.controller";
-import { Utils } from "../shared/utils/validation";
+import { UserController } from "../modules/user/user.controller";
+import { JwtMiddleware } from "../shared/middlewares/jwt.middleware";
 
 export class ContainerConfigLoader {
   public static Load(): Container {
@@ -13,6 +13,7 @@ export class ContainerConfigLoader {
 
     // services
     container.bind<TypeOrmService>(TYPES.TypeOrmService).to(TypeOrmService).inSingletonScope();
+    container.bind<JwtMiddleware>(TYPES.JwtMiddleware).to(JwtMiddleware);
     container.bind<Utils>(TYPES.Utils).to(Utils).inSingletonScope();
 
     // repositories
@@ -22,7 +23,6 @@ export class ContainerConfigLoader {
     container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
 
     // controllers
-    container.bind<UsersController>(TYPES.UsersController).to(UsersController).inSingletonScope();
     container.bind<UserController>(TYPES.UserController).to(UserController).inSingletonScope();
 
     return container;
