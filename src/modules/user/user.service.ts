@@ -8,6 +8,7 @@ import Logger from "../../config/winston.logger";
 import { Utils } from "../../shared/utils/validation";
 import { CredentialsDTO } from "./dto/credentials.dto";
 import { IToken } from "./interface/token.interface";
+import { UpdateDTO } from "./dto/update-user.dto";
 
 @injectable()
 export class UserService {
@@ -94,6 +95,24 @@ export class UserService {
   }
 
   // update
+  public async updateOne(id: number, updateDto: UpdateDTO): Promise<User | any> {
+    const result = await this.utils.classValidation(UpdateDTO, updateDto).then((validatedUser: UpdateDTO) => {
+      if (validatedUser) {
+        return validatedUser;
+      }
+    });
+
+    const user = await this.userRepository.getById(id);
+
+    if (!user) {
+      this.logger.error("User not found");
+      return {
+        message: "User Not Found",
+      };
+    }
+
+    return await this.userRepository.updateOne(id, result);
+  }
 
   // delete
 }

@@ -48,4 +48,7 @@ export class Utils {
 
     return { token };
   }
+
+  // instance creator for assign objects
+  public async assignObject() {}
 }

@@ -1,7 +1,8 @@
 import { injectable, decorate } from "inversify";
-import { Repository, createQueryBuilder, InsertResult } from "typeorm";
+import { Repository, createQueryBuilder, InsertResult, UpdateResult } from "typeorm";
 import { User } from "./entity/user.entity";
 import { UserDTO } from "./dto/user.dto";
+import { UpdateDTO } from "./dto/update-user.dto";
 
 decorate(injectable(), Repository);
 export class UserRepository extends Repository<User> {
@@ -41,6 +42,28 @@ export class UserRepository extends Repository<User> {
   }
 
   // update
+  public async updateOne(id: number, updateDto: UpdateDTO): Promise<UpdateResult> {
+    // const entity = Object.assign(new User(), {
+    //   username: updateDto.username ? updateDto.username : null,
+    //   email: updateDto.email ? updateDto.email : null,
+    //   firstName: updateDto.firstName ? updateDto.firstName : null,
+    //   lastName: updateDto.lastName ? updateDto.lastName : null,
+    // });
+
+    return await createQueryBuilder()
+      .update(User)
+      .set({
+        username: updateDto.username,
+        email: updateDto.email,
+        firstName: updateDto.firstName,
+        lastName: updateDto.lastName,
+      })
+      .where({ id: id })
+      .execute()
+      .then((value: UpdateResult) => {
+        return value;
+      });
+  }
 
   // delete
 }
