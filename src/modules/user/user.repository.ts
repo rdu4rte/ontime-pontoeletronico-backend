@@ -43,21 +43,9 @@ export class UserRepository extends Repository<User> {
 
   // update
   public async updateOne(id: number, updateDto: UpdateDTO): Promise<UpdateResult> {
-    // const entity = Object.assign(new User(), {
-    //   username: updateDto.username ? updateDto.username : null,
-    //   email: updateDto.email ? updateDto.email : null,
-    //   firstName: updateDto.firstName ? updateDto.firstName : null,
-    //   lastName: updateDto.lastName ? updateDto.lastName : null,
-    // });
-
     return await createQueryBuilder()
       .update(User)
-      .set({
-        username: updateDto.username,
-        email: updateDto.email,
-        firstName: updateDto.firstName,
-        lastName: updateDto.lastName,
-      })
+      .set(updateDto)
       .where({ id: id })
       .execute()
       .then((value: UpdateResult) => {

@@ -1,6 +1,5 @@
 import { ApiModel, ApiModelProperty } from "swagger-express-ts";
 import { IsAlphanumeric, IsBoolean, IsEmail, IsOptional, IsString } from "class-validator";
-// import { PasswordDTO } from "./user.dto";
 
 @ApiModel({
   description: "Update User",
@@ -37,11 +36,4 @@ export class UpdateDTO {
   @IsEmail()
   @IsOptional()
   email: string;
-
-  // @ApiModelProperty({
-  //   description: "Passwords",
-  //   required: false,
-  //   model: "Password",
-  // })
-  // password: PasswordDTO;
 }

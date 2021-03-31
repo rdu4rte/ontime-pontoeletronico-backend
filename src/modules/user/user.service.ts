@@ -62,6 +62,9 @@ export class UserService {
     });
 
     await this.userRepository.insertOne(result);
+    return {
+      message: `User "${result.username}" registered`,
+    };
   }
 
   // login
@@ -95,7 +98,7 @@ export class UserService {
   }
 
   // update
-  public async updateOne(id: number, updateDto: UpdateDTO): Promise<User | any> {
+  public async updateOne(id: number, updateDto: UpdateDTO): Promise<User | MessageDTO> {
     const result = await this.utils.classValidation(UpdateDTO, updateDto).then((validatedUser: UpdateDTO) => {
       if (validatedUser) {
         return validatedUser;
@@ -111,7 +114,10 @@ export class UserService {
       };
     }
 
-    return await this.userRepository.updateOne(id, result);
+    await this.userRepository.updateOne(id, result);
+    return {
+      message: `User "${result.username}" updated`,
+    };
   }
 
   // delete

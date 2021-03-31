@@ -154,7 +154,7 @@ export class UserController extends BaseHttpController {
       },
     },
     responses: {
-      204: { description: "User Updated" },
+      202: { description: "User Updated" },
       500: { description: "Internal Server Error" },
     },
   })
@@ -162,7 +162,7 @@ export class UserController extends BaseHttpController {
   public async updateUser(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
       const result = await this.userService.updateOne(+req.params.id, req.body);
-      return this.json(result, 204);
+      return this.json(result, 202);
     } catch (err) {
       return this.json({
         statusCode: 500,
