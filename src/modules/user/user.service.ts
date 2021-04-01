@@ -121,4 +121,7 @@ export class UserService {
   }
 
   // delete
+  public async deleteOne(id: number): Promise<any> {
+    return await this.userRepository.deleteOne(id);
+  }
 }

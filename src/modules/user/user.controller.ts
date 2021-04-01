@@ -1,7 +1,8 @@
 import { inject } from "inversify";
-import { BaseHttpController, controller, httpGet, httpPost, httpPut } from "inversify-express-utils";
+import { BaseHttpController, controller, httpDelete, httpGet, httpPost, httpPut } from "inversify-express-utils";
 import { TYPES } from "../../ioc/types";
 import {
+  ApiOperationDelete,
   ApiOperationGet,
   ApiOperationPost,
   ApiOperationPut,
@@ -11,6 +12,8 @@ import {
 import { UserService } from "./user.service";
 import { Request, Response, NextFunction } from "express";
 import { JsonResult } from "inversify-express-utils/dts/results";
+import { AuthRole } from "../../shared/middlewares/role.middleware";
+import { Role } from "./dto/user.dto";
 
 @ApiPath({
   path: "/users",
@@ -25,12 +28,15 @@ export class UserController extends BaseHttpController {
   @ApiOperationGet({
     description: "Fetch Users",
     path: "",
+    security: {
+      bearerAuth: [],
+    },
     responses: {
       200: { description: "Success" },
       500: { description: "Failed to fetch users" },
     },
   })
-  @httpGet("/")
+  @httpGet("/", TYPES.JwtMiddleware, AuthRole(Role.admin))
   public async fetchUsers(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
       const result = await this.userService.fetchUsers();
@@ -144,7 +150,7 @@ export class UserController extends BaseHttpController {
       path: {
         id: {
           required: true,
-          type: SwaggerDefinitionConstant.Parameter.Type.STRING,
+          type: SwaggerDefinitionConstant.Parameter.Type.NUMBER,
         },
       },
       body: {
@@ -166,6 +172,35 @@ export class UserController extends BaseHttpController {
     } catch (err) {
       return this.json({
         statusCode: 500,
+        message: `Internal Server Error: ${err.message}`,
+      });
+    }
+  }
+
+  @ApiOperationDelete({
+    description: "Delete By Id",
+    path: "/{id}",
+    parameters: {
+      path: {
+        id: {
+          required: true,
+          type: SwaggerDefinitionConstant.Parameter.Type.NUMBER,
+        },
+      },
+    },
+    responses: {
+      200: { description: "Success" },
+      404: { description: "Failed to delete user or user not found" },
+    },
+  })
+  @httpDelete("/:id")
+  public async deleteOne(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
+    try {
+      const result = await this.userService.deleteOne(+req.params.id);
+      return this.json(result, 200);
+    } catch (err) {
+      return this.json({
+        statusCode: 404,
         message: `Internal Server Error: ${err.message}`,
       });
     }

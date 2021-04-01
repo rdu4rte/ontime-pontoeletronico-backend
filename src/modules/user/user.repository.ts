@@ -1,5 +1,5 @@
 import { injectable, decorate } from "inversify";
-import { Repository, createQueryBuilder, InsertResult, UpdateResult } from "typeorm";
+import { Repository, createQueryBuilder, InsertResult, UpdateResult, DeleteResult } from "typeorm";
 import { User } from "./entity/user.entity";
 import { UserDTO } from "./dto/user.dto";
 import { UpdateDTO } from "./dto/update-user.dto";
@@ -54,4 +54,30 @@ export class UserRepository extends Repository<User> {
   }
 
   // delete
+  public async deleteOne(id: number): Promise<any> {
+    return await createQueryBuilder()
+      .delete()
+      .from(User)
+      .where({ id: id })
+      .execute()
+      .then((res: DeleteResult) => {
+        if (res.affected === 0) {
+          return {
+            message: `Nothing here to delete, user not found by Id ${id}`,
+            rowsAffected: res.affected,
+          };
+        }
+
+        return {
+          message: `User deleted by Id ${id}`,
+          rowsAffected: res.affected,
+        };
+      })
+      .catch((reason: any) => {
+        return {
+          message: `Failed to delete by Id ${id}`,
+          detail: reason,
+        };
+      });
+  }
 }
