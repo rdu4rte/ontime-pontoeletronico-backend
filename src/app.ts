@@ -55,6 +55,13 @@ const serverStart = async () => {
                 version: "1.0",
               },
               basePath: "/api/v1",
+              securityDefinitions: {
+                apiKeyHeader: {
+                  type: swagger.SwaggerDefinitionConstant.Security.Type.API_KEY,
+                  in: swagger.SwaggerDefinitionConstant.Security.In.HEADER,
+                  name: "Authorization",
+                },
+              },
             },
           }),
         );

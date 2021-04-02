@@ -1,5 +1,13 @@
 import { inject } from "inversify";
-import { BaseHttpController, controller, httpDelete, httpGet, httpPost, httpPut } from "inversify-express-utils";
+import {
+  BaseHttpController,
+  controller,
+  httpDelete,
+  httpGet,
+  httpPost,
+  httpPut,
+  BaseMiddleware,
+} from "inversify-express-utils";
 import { TYPES } from "../../ioc/types";
 import {
   ApiOperationDelete,
@@ -29,7 +37,7 @@ export class UserController extends BaseHttpController {
     description: "Fetch Users",
     path: "",
     security: {
-      bearerAuth: [],
+      apiKeyHeader: [],
     },
     responses: {
       200: { description: "Success" },
@@ -52,6 +60,9 @@ export class UserController extends BaseHttpController {
   @ApiOperationGet({
     description: "Get User By Id",
     path: "/{id}",
+    security: {
+      apiKeyHeader: [],
+    },
     parameters: {
       path: {
         id: {
@@ -146,6 +157,9 @@ export class UserController extends BaseHttpController {
   @ApiOperationPut({
     description: "Update User",
     path: "/{id}",
+    security: {
+      apiKeyHeader: [],
+    },
     parameters: {
       path: {
         id: {
@@ -180,6 +194,9 @@ export class UserController extends BaseHttpController {
   @ApiOperationDelete({
     description: "Delete By Id",
     path: "/{id}",
+    security: {
+      apiKeyHeader: [],
+    },
     parameters: {
       path: {
         id: {

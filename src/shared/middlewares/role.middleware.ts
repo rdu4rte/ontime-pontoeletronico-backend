@@ -6,8 +6,7 @@ import Logger from "../../config/winston.logger";
 
 export function AuthRole(...roles: Role[]) {
   return async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const token = req.headers.authorization.split(" ")[1];
-    const user: any = jwt.verify(token, jwtSecret);
+    const user = req.user;
 
     if (!roles.includes(user.role)) {
       Logger.error(`User role not authorized, role: ${user.role}, id: ${user.id}`);
