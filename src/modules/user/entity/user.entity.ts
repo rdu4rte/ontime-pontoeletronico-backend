@@ -1,8 +1,9 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { randomBytes } from "crypto";
 import * as argon2 from "argon2";
 import { argonSalt } from "../../../config/env.config";
 import { Role } from "../dto/user.dto";
+import { Clock } from "../../clock/entity/clock.entity";
 
 @Entity({ name: "user" })
 export class User {
@@ -36,6 +37,9 @@ export class User {
 
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
+
+  @OneToMany(() => Clock, (clock) => clock._user)
+  _clock: Clock[];
 
   @BeforeInsert()
   async hashPassword() {

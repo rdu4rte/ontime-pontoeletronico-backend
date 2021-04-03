@@ -1,6 +1,5 @@
 import { inject, injectable } from "inversify";
 import { BaseMiddleware } from "inversify-express-utils";
-import Logger from "../../config/winston.logger";
 import { Request, Response, NextFunction } from "express";
 import { JsonResult } from "inversify-express-utils/dts/results";
 import * as jwt from "jsonwebtoken";
@@ -10,8 +9,6 @@ import { UserService } from "../../modules/user/user.service";
 
 @injectable()
 export class JwtMiddleware extends BaseMiddleware {
-  private logger = Logger;
-
   constructor(@inject(TYPES.UserService) private userService: UserService) {
     super();
   }
@@ -33,10 +30,8 @@ export class JwtMiddleware extends BaseMiddleware {
       const decodedToken: any = jwt.verify(token, jwtSecret);
       req.user = await this.userService.getById(decodedToken["id"]);
 
-      this.logger.verbose("User authenticated");
       next();
     } catch (err) {
-      this.logger.error("Token not valid");
       res.status(401).json({
         message: err.message,
       });

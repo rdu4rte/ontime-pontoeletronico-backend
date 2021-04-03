@@ -32,6 +32,7 @@
     "inversify": "^5.0.5",
     "inversify-express-utils": "^6.3.2",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "pg": "^8.5.1",
     "swagger-express-ts": "^1.0.1",
     "swagger-ui-dist": "^3.45.1",

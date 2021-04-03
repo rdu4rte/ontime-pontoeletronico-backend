@@ -76,7 +76,7 @@ export class UserController extends BaseHttpController {
       500: { description: "Failed to get user or user is not registered" },
     },
   })
-  @httpGet("/:id")
+  @httpGet("/:id", TYPES.JwtMiddleware)
   public async getById(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
       const result = await this.userService.getById(+req.params.id);
@@ -178,7 +178,7 @@ export class UserController extends BaseHttpController {
       500: { description: "Internal Server Error" },
     },
   })
-  @httpPut("/:id")
+  @httpPut("/:id", TYPES.JwtMiddleware)
   public async updateUser(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
       const result = await this.userService.updateOne(+req.params.id, req.body);
@@ -210,7 +210,7 @@ export class UserController extends BaseHttpController {
       404: { description: "Failed to delete user or user not found" },
     },
   })
-  @httpDelete("/:id")
+  @httpDelete("/:id", TYPES.JwtMiddleware, AuthRole(Role.admin))
   public async deleteOne(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
     try {
       const result = await this.userService.deleteOne(+req.params.id);

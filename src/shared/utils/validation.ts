@@ -9,6 +9,7 @@ import Logger from "../../config/winston.logger";
 import argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { jwtExpires } from "../../config/env.config";
+import { Clock } from "../../modules/clock/entity/clock.entity";
 
 @injectable()
 export class Utils {
@@ -49,6 +50,6 @@ export class Utils {
     return { token };
   }
 
-  // instance creator for assign objects
-  public async assignObject() {}
+  // calculate hours
+  public async calculateHours(times: Clock[]): Promise<any> {}
 }

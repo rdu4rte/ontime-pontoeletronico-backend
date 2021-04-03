@@ -8,7 +8,7 @@ decorate(injectable(), Repository);
 export class UserRepository extends Repository<User> {
   // fetch
   public async fetchUsers(): Promise<User[]> {
-    return await createQueryBuilder().select("user").from(User, "user").getMany();
+    return await createQueryBuilder().from(User, "user").getMany();
   }
 
   // get by id

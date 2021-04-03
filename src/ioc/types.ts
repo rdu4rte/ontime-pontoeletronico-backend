@@ -6,10 +6,13 @@ export const TYPES = {
 
   // repositories
   UserRepository: Symbol("UserRepository"),
+  ClockRepository: Symbol("ClockRepository"),
 
   // services
   UserService: Symbol("UserService"),
+  ClockService: Symbol("ClockService"),
 
   // controllers
   UserController: Symbol("UserController"),
+  ClockController: Symbol("ClockController"),
 };
