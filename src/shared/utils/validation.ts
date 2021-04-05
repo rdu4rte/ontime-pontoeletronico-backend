@@ -10,6 +10,7 @@ import argon2 from "argon2";
 import * as jwt from "jsonwebtoken";
 import { jwtExpires } from "../../config/env.config";
 import { Clock } from "../../modules/clock/entity/clock.entity";
+import moment from "moment";
 
 @injectable()
 export class Utils {
@@ -51,5 +52,23 @@ export class Utils {
   }
 
   // calculate hours
-  public async calculateHours(times: Clock[]): Promise<any> {}
+  public async calculateHours(times: Clock[]): Promise<any> {
+    const timesArray: any = [];
+    times.map((time) => {
+      timesArray.push(moment(time.entry, "HH:mm:ss"));
+    });
+
+    const dt1 = timesArray[0];
+    const dt2 = timesArray[1];
+    const dt3 = timesArray[2];
+    const dt4 = timesArray[3];
+
+    const ts1 = dt2 - dt1;
+    const ts2 = dt4 - dt3;
+
+    const duration = moment.utc(ts1 + ts2);
+    const time = duration.format("HH:mm:ss");
+
+    return { time: time, hits: timesArray };
+  }
 }
