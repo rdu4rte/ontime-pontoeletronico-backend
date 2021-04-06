@@ -23,20 +23,20 @@ export class ClockDTO {
   day: number;
 
   @ApiModelProperty({
-    description: "Year",
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  year: number;
-
-  @ApiModelProperty({
     description: "Month",
     required: true,
   })
   @IsNotEmpty()
   @IsNumber()
   month: number;
+
+  @ApiModelProperty({
+    description: "Year",
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  year: number;
 
   @ApiModelProperty({
     description: "User Id",

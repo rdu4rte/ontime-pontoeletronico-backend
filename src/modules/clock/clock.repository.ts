@@ -27,11 +27,12 @@ export class ClockRepository extends Repository<Clock> {
   }
 
   // check hits per day
-  public async checkHits(id: number, day: number, month: number): Promise<Clock[]> {
+  public async checkHits(id: number, day: number, month: number, year: number): Promise<Clock[]> {
     return await createQueryBuilder(Clock, "clock")
       .where("clock.UserId = :id", { id: id })
       .andWhere("clock.day = :day", { day: day })
       .andWhere("clock.month = :month", { month: month })
+      .andWhere("clock.year = :year", { year: year })
       .getMany();
   }
 }

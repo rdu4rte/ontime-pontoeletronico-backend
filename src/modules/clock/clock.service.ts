@@ -45,22 +45,43 @@ export class ClockService {
       };
     }
 
-    const hitsOnDay = await this.clockRepository.checkHits(newEntry.userId, newEntry.day, newEntry.month);
+    const hitsOnDay = await this.clockRepository.checkHits(
+      newEntry.userId,
+      newEntry.day,
+      newEntry.month,
+      newEntry.year,
+    );
 
-    if (hitsOnDay.length > 4) {
+    if (hitsOnDay.length >= 4) {
       return { message: `User already have 4 hits for today: ${newEntry.day}/${newEntry.month}/${newEntry.year}` };
-    } else if (hitsOnDay.length == 4) {
-      const timeWorked = await this.utils.calculateHours(hitsOnDay);
-      return {
-        message: `Time worked today - ${newEntry.day}/${newEntry.month}/${newEntry.year}: ${timeWorked.time}`,
-        timeWorked: timeWorked.time,
-        hits: timeWorked.hits,
-      };
     }
 
     await this.clockRepository.insertEntry(result);
     return {
       message: `New entry for user "${userEntity.username}", ${newEntry.entry} - ${newEntry.day}/${newEntry.month}/${newEntry.year}`,
     };
+  }
+
+  public async checkMyHits(user: User): Promise<any> {
+    moment.locale("pt-br");
+
+    const day = +moment().format("DD");
+    const month = +moment().format("MM");
+    const year = +moment().year();
+
+    const hitsOnDay = await this.clockRepository.checkHits(user.id, day, month, year);
+
+    if (hitsOnDay.length >= 4) {
+      const timeWorked = await this.utils.calculateHours(hitsOnDay);
+      return {
+        day: `${day}/${month}/${year}`,
+        timeWorked: timeWorked.time,
+        hits: timeWorked.hits,
+      };
+    } else {
+      return {
+        message: "Incomplete hits today...",
+      };
+    }
   }
 }

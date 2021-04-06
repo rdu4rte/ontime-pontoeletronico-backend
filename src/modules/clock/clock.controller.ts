@@ -1,10 +1,10 @@
 import { inject } from "inversify";
-import { BaseHttpController, controller, httpPost } from "inversify-express-utils";
+import { BaseHttpController, controller, httpGet, httpPost } from "inversify-express-utils";
 import { TYPES } from "../../ioc/types";
 import { ClockService } from "./clock.service";
 import { Request, Response, NextFunction } from "express";
 import { JsonResult } from "inversify-express-utils/dts/results";
-import { ApiOperationPost, ApiPath } from "swagger-express-ts";
+import { ApiOperationGet, ApiOperationPost, ApiPath } from "swagger-express-ts";
 
 @ApiPath({
   path: "/clock",
@@ -33,6 +33,31 @@ export class ClockController extends BaseHttpController {
     try {
       const result = await this.clockService.insertEntry(req.user);
       return this.json(result, 202);
+    } catch (err) {
+      return this.json({
+        statusCode: 500,
+        message: `Internal Server Error: ${err.message}`,
+      });
+    }
+  }
+
+  @ApiOperationGet({
+    description: "Check My Hits",
+    path: "/checkhits",
+    parameters: {},
+    security: {
+      apiKeyHeader: [],
+    },
+    responses: {
+      200: { description: "Success" },
+      500: { description: "Failed To Check Hits" },
+    },
+  })
+  @httpGet("/checkhits", TYPES.JwtMiddleware)
+  public async checkHits(req: Request, res: Response, next: NextFunction): Promise<JsonResult> {
+    try {
+      const result = await this.clockService.checkMyHits(req.user);
+      return this.json(result, 200);
     } catch (err) {
       return this.json({
         statusCode: 500,

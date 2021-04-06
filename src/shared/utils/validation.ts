@@ -69,6 +69,9 @@ export class Utils {
     const duration = moment.utc(ts1 + ts2);
     const time = duration.format("HH:mm:ss");
 
-    return { time: time, hits: timesArray };
+    return {
+      time: time,
+      hits: timesArray,
+    };
   }
 }
